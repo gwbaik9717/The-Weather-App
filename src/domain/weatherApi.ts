@@ -1,6 +1,6 @@
 import { createApiClient } from "@/domain/apiClient";
 import { ENV } from "@/config/env";
-import { WeatherDTO, ForecastWeatherDTO, CurrentWeatherDTO } from "@/types/dto";
+import { ForecastWeatherDTO, CurrentWeatherDTO } from "@/types/dto";
 import { AxiosRequestConfig, isAxiosError } from "axios";
 import { Weather, createWeather } from "./weather";
 
