@@ -16,11 +16,36 @@ export type WeatherMainDTO = {
   grnd_level: number;
 };
 
-export type CurrentWeatherDTO = {
+export type WeatherDTO = {
   weather: Array<WeatherIconDTO>;
   main: WeatherMainDTO;
+  dt: number; // Time of data forecasted, unix, UTC
+};
+
+export type CurrentWeatherDTO = {
+  name: string;
+} & WeatherDTO;
+
+export type ForecastWeatherItemDTO = WeatherDTO & {
+  city: {
+    name: string;
+    country: string;
+  };
 };
 
 export type ForecastWeatherDTO = {
-  list: Array<CurrentWeatherDTO>;
+  list: Array<ForecastWeatherItemDTO>;
+};
+
+// Type Guards
+export const isCurrentWeatherDTO = (
+  weather: CurrentWeatherDTO | ForecastWeatherItemDTO
+): weather is CurrentWeatherDTO => {
+  return "name" in weather && typeof weather.name === "string";
+};
+
+export const isForecastWeatherItemDTO = (
+  weather: CurrentWeatherDTO | ForecastWeatherItemDTO
+): weather is ForecastWeatherItemDTO => {
+  return "city" in weather && typeof weather.city?.name === "string";
 };
