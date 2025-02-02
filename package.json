@@ -8,21 +8,21 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"esbuild src/index.ts --bundle --outdir=dist --platform=node --target=esnext --format=esm --watch --loader:.css=text\" \"tailwindcss -i ./styles.css -o ./dist/styles.css --watch\"",
-    "build": "node esbuild.config.js && npx tailwindcss -i ./styles.css -o ./dist/styles.css",
-    "test": "jest --runInBand --detectOpenHandles --forceExit"
+    "dev": "concurrently \"esbuild src/index.ts --bundle --outdir=dist --platform=browser --target=esnext --format=esm --watch --sourcemap --alias:@/*=./src/* --loader:.css=text\" \"tailwindcss -i ./styles.css -o ./dist/styles.css --watch\"",
+    "build": "node esbuild.config.js && npx tailwindcss -i ./styles.css -o ./dist/styles.css --minify"
   },
   "devDependencies": {
-    "babel-jest": "^29.7.0",
+    "@types/node": "^22.13.0",
     "concurrently": "^9.1.2",
     "esbuild": "^0.21.1",
     "eslint": "^8.57.0",
-    "jest": "^29.7.0",
     "prettier": "^3.2.5",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.6.3"
   },
   "dependencies": {
+    "axios": "^1.7.9",
+    "dotenv": "^16.4.7",
     "ganu-router": "^0.0.3"
   }
 }

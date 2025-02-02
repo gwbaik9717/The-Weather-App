@@ -26,9 +26,15 @@ esbuild
     entryPoints: ["src/index.ts"],
     bundle: true,
     outdir: "dist",
-    platform: "node",
+    platform: "browser", // Changed from 'node' to 'browser'
     target: "esnext",
     format: "esm",
     loader: { ".css": "text" },
+    resolveExtensions: [".ts", ".js"],
+    alias: {
+      "@": path.resolve("src"),
+    },
+    minify: true,
+    sourcemap: true,
   })
   .catch(() => process.exit(1));
