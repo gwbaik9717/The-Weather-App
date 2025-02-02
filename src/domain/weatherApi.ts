@@ -1,7 +1,8 @@
 import { createApiClient } from "@/domain/apiClient";
 import { ENV } from "@/config/env";
-import { CurrentWeatherDTO } from "@/types/dto";
+import { CurrentWeatherDTO, ForecastWeatherDTO } from "@/types/dto";
 import { AxiosRequestConfig, isAxiosError } from "axios";
+import { Weather, createWeather } from "./weather";
 
 type WeatherLocation = {
   lat: number;
@@ -24,7 +25,7 @@ const generateWeatherQueryParams = (location: WeatherLocation) => {
   };
 };
 
-const genereateWeatherErrorMessage = (code?: string) => {
+const generateWeatherErrorMessage = (code?: string) => {
   switch (code) {
     case "401":
       throw new Error("API key is not valid.");
@@ -45,43 +46,50 @@ const genereateWeatherErrorMessage = (code?: string) => {
 export const weatherApi = (() => {
   const apiClient = generateWeatherApiClient();
 
-  const getCurrentWeatherData = async (location: WeatherLocation) => {
+  const getCurrentWeatherData = async (
+    location: WeatherLocation
+  ): Promise<Weather> => {
     try {
       const params = generateWeatherQueryParams(location);
-      const config: AxiosRequestConfig = {
-        params,
-      };
-      return await apiClient.get<CurrentWeatherDTO>("/weather", config);
+      const config: AxiosRequestConfig = { params };
+      const { data } = await apiClient.get<CurrentWeatherDTO>(
+        "/weather",
+        config
+      );
+
+      return createWeather(data);
     } catch (e: unknown) {
       if (isAxiosError(e)) {
-        const errorMessage = genereateWeatherErrorMessage(e.code);
+        const errorMessage = generateWeatherErrorMessage(e.code);
         throw new Error(errorMessage);
       }
+      throw e;
     }
   };
 
-  const getForecastWeatherData = async (location: WeatherLocation) => {
+  const getForecastWeatherData = async (
+    location: WeatherLocation
+  ): Promise<Weather[]> => {
     try {
       const params = generateWeatherQueryParams(location);
-      const config: AxiosRequestConfig = {
-        params,
-      };
-      return await apiClient.get<CurrentWeatherDTO>("/forecast", config);
+      const config: AxiosRequestConfig = { params };
+      const { data } = await apiClient.get<ForecastWeatherDTO>(
+        "/forecast",
+        config
+      );
+
+      return data.list.map((dto) => createWeather(dto));
     } catch (e: unknown) {
       if (isAxiosError(e)) {
-        const errorMessage = genereateWeatherErrorMessage(e.code);
+        const errorMessage = generateWeatherErrorMessage(e.code);
         throw new Error(errorMessage);
       }
+      throw e;
     }
-  };
-
-  const getWeatherIconURL = (iconId: string) => {
-    return `https://openweathermap.org/img/wn/${iconId}@2x.png`;
   };
 
   return {
     getCurrentWeatherData,
     getForecastWeatherData,
-    getWeatherIconURL,
   };
 })();
