@@ -1,6 +1,10 @@
 import fs from "fs";
 import path from "path";
 import esbuild from "esbuild";
+import dotenv from "dotenv";
+
+// Load environment variables
+dotenv.config();
 
 // Ensure `dist` folder exists
 const DIST_DIR = path.resolve("dist");
@@ -36,5 +40,9 @@ esbuild
     },
     minify: true,
     sourcemap: true,
+    define: {
+      "process.env.NODE_ENV": '"development"',
+      "process.env.OPEN_WEATHER_API_KEY": `"${process.env.OPEN_WEATHER_API_KEY}"`,
+    },
   })
   .catch(() => process.exit(1));
