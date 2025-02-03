@@ -10,7 +10,7 @@ type WeatherLocation = {
 };
 
 const generateWeatherApiClient = () => {
-  const BASE_URL = "api.openweathermap.org/data/2.5/";
+  const BASE_URL = "https://api.openweathermap.org/data/2.5/";
   const apiClient = createApiClient({
     baseURL: BASE_URL,
   });

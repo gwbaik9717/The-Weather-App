@@ -1,8 +1,8 @@
 import { Weather } from "@/domain/weather";
 import { createElement } from "@/utils/dom";
 
-const weatherCard = (weather: Weather) => {
-  const getTemplate = () => {
+export const weatherCard = (() => {
+  const create = (weather: Weather) => {
     const wrapper = createElement("div");
     wrapper.setAttribute(
       "class",
@@ -48,9 +48,46 @@ const weatherCard = (weather: Weather) => {
     return wrapper;
   };
 
-  return {
-    getTemplate,
-  };
-};
+  const createSkeleton = () => {
+    const wrapper = createElement("div");
+    wrapper.setAttribute(
+      "class",
+      "overflow-hidden rounded-lg bg-white shadow w-full border border-gray-200 animate-pulse"
+    );
 
-export default weatherCard;
+    const innerHTML = `
+      <div class="px-6 py-5">
+        <div class="flex justify-between items-center mb-4">
+          <div class="h-6 w-24 bg-gray-200 rounded"></div>
+          <div class="h-4 w-32 bg-gray-200 rounded"></div>
+        </div>
+
+        <div class="flex items-start justify-between"> 
+          <div class="flex flex-col items-center">
+            <div class="w-16 h-16 bg-gray-200 rounded-full"></div>
+            <div class="h-4 w-20 bg-gray-200 rounded mt-1"></div>
+          </div>
+
+          <div class="text-right">
+            <div class="mb-2">
+              <div class="h-8 w-16 bg-gray-200 rounded ml-auto"></div>
+            </div>
+            <div class="flex gap-1 justify-end">
+              <div class="h-4 w-12 bg-gray-200 rounded"></div>
+              <div class="h-4 w-2 bg-gray-200 rounded"></div>
+              <div class="h-4 w-12 bg-gray-200 rounded"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    wrapper.innerHTML = innerHTML;
+    return wrapper;
+  };
+
+  return {
+    create,
+    createSkeleton,
+  };
+})();
