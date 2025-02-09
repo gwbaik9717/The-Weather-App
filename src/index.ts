@@ -1,13 +1,13 @@
-import { createRouter } from "ganu-router";
+import "./styles.css";
 import { currentWeatherPage } from "@/view/currentWeatherPage";
-import { $ } from "./utils/dom";
+import { $ } from "@/utils/dom";
+import { router } from "@/router";
 
 const app = $("#app");
 if (!app) {
   throw new Error("Cannot find app root element");
 }
 
-const router = createRouter();
 router.initialize({
   routes: [
     {

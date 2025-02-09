@@ -1,8 +1,13 @@
 import { createApiClient } from "@/domain/apiClient";
-import { ENV } from "@/config/env";
 import { ForecastWeatherDTO, CurrentWeatherDTO } from "@/types/dto";
 import { AxiosRequestConfig, isAxiosError } from "axios";
 import { Weather, createWeather } from "./weather";
+
+const API_KEY = import.meta.env.VITE_OPEN_WEATHER_API_KEY;
+
+if (!API_KEY) {
+  throw new Error("VITE_OPEN_WEATHER_API_KEY is required in .env file");
+}
 
 type WeatherLocation = {
   lat: number;
@@ -21,7 +26,7 @@ const generateWeatherApiClient = () => {
 const generateWeatherQueryParams = (location: WeatherLocation) => {
   return {
     ...location,
-    appid: ENV.OPEN_WEATHER_API_KEY,
+    appid: API_KEY,
   };
 };
 
