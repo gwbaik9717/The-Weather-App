@@ -8,12 +8,13 @@ if (!app) {
 }
 
 const router = createRouter();
-router.initialize();
-
-// Define routes
-router.addRoute("/", () => {
-  currentWeatherPage.render(app);
+router.initialize({
+  routes: [
+    {
+      path: "/",
+      handler: () => {
+        currentWeatherPage.render(app);
+      },
+    },
+  ],
 });
-
-// Default route
-router.navigate("/");
