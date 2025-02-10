@@ -26,26 +26,10 @@ export type CurrentWeatherDTO = {
   name: string;
 } & WeatherDTO;
 
-export type ForecastWeatherItemDTO = WeatherDTO & {
+export type ForecastWeatherDTO = {
+  list: Array<WeatherDTO>;
   city: {
     name: string;
     country: string;
   };
-};
-
-export type ForecastWeatherDTO = {
-  list: Array<ForecastWeatherItemDTO>;
-};
-
-// Type Guards
-export const isCurrentWeatherDTO = (
-  weather: CurrentWeatherDTO | ForecastWeatherItemDTO
-): weather is CurrentWeatherDTO => {
-  return "name" in weather && typeof weather.name === "string";
-};
-
-export const isForecastWeatherItemDTO = (
-  weather: CurrentWeatherDTO | ForecastWeatherItemDTO
-): weather is ForecastWeatherItemDTO => {
-  return "city" in weather && typeof weather.city?.name === "string";
 };
