@@ -2,19 +2,12 @@ import { Weather } from "@/domain/weather";
 import { weatherCard } from "@/view/weatherCard";
 import { page } from "@/view/page";
 import { weatherApi } from "@/domain/weatherApi";
+import { router } from "@/router";
 
-const SeoulLocation = { lat: 44.34, lon: 10.99 };
+const SeoulLocation = { lat: 37.58, lon: 127 };
 
 export const currentWeatherPage = (() => {
   let $page: HTMLElement;
-  let initialized = false;
-
-  const init = (app: HTMLElement) => {
-    if (initialized) return;
-    $page = page.create();
-    app.appendChild($page);
-    initialized = true;
-  };
 
   const renderSkeletonCard = () => {
     const $weatherSkeletonCard = weatherCard.createSkeleton();
@@ -23,6 +16,14 @@ export const currentWeatherPage = (() => {
 
   const renderCard = (weather: Weather) => {
     const $weatherCard = weatherCard.create(weather);
+    $weatherCard.classList.add("cursor-pointer");
+    $weatherCard.addEventListener("click", () => {
+      const params = new URLSearchParams({
+        lat: SeoulLocation.lat.toString(),
+        lon: SeoulLocation.lon.toString(),
+      });
+      router.navigate(`/forecast?${params.toString()}`);
+    });
     $page.appendChild($weatherCard);
   };
 
@@ -30,8 +31,10 @@ export const currentWeatherPage = (() => {
     $page.innerHTML = "";
   };
 
-  const render = async (app: HTMLElement) => {
-    init(app);
+  const render = async ($app: HTMLElement) => {
+    $page = page.create();
+    $app.innerHTML = "";
+    $app.appendChild($page);
     renderSkeletonCard();
 
     try {

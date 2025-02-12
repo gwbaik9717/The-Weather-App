@@ -27,6 +27,7 @@ const generateWeatherQueryParams = (location: WeatherLocation) => {
   return {
     ...location,
     appid: API_KEY,
+    units: "metric",
   };
 };
 
