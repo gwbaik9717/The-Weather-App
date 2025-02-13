@@ -5,8 +5,8 @@ import { $ } from "@/utils/dom";
 import { router } from "@/router";
 
 document.addEventListener("DOMContentLoaded", () => {
-  const app = $("#app");
-  if (!app) {
+  const $app = $("#app");
+  if (!$app) {
     throw new Error("Cannot find app root element");
   }
 
@@ -15,13 +15,25 @@ document.addEventListener("DOMContentLoaded", () => {
       {
         path: "/",
         handler: () => {
-          currentWeatherPage.render(app);
+          currentWeatherPage.render($app);
         },
       },
       {
         path: "/forecast",
         handler: () => {
-          forecastWeatherPage.render(app);
+          forecastWeatherPage.render($app);
+        },
+        beforeLoad: (location) => {
+          const { params } = location;
+          const searchParams = params.searchParams;
+          if (!searchParams) {
+            throw router.navigate("/");
+          }
+          const lat = searchParams.get("lat");
+          const lon = searchParams.get("lon");
+          if (!lat || !lon) {
+            throw router.navigate("/");
+          }
         },
       },
     ],
